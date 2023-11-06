@@ -58,9 +58,18 @@ namespace DCTTask
 
             return coinNames;
         }
+
+        public static async Task<CoinCapData> GetCoinById(string id)
+        {
+            HttpClient httpClient = new HttpClient();
+            var apiUrl = $"https://api.coincap.io/v2/assets/{id}";
+            var response = await httpClient.GetStringAsync(apiUrl);
+
+            return JsonSerializer.Deserialize<CoinCapResponse>(response).data;
+        }
         public static async Task<List<CoinCapData>> GetCoinData(int currentPage, int amount, bool refreshData)
         {
-            // Initialize cached data if not already done
+            // Initialize cached data if not already done   
             if (cachedData == null)
             {
                 cachedData = new List<CoinCapData>();
