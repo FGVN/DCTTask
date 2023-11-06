@@ -18,6 +18,7 @@ namespace DCTTask
         {
             InitializeComponent();
             Loaded += MainWindow_Loaded;
+            Closing += MainWindow_Closing; // Handle the Closing event
 
             // Initialize and start the data update timer
             dataUpdateTimer = new DispatcherTimer();
@@ -26,53 +27,70 @@ namespace DCTTask
             dataUpdateTimer.Start();
         }
 
-        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private void ShowLoadingOverlay()
         {
-            // Initial data load
-            await LoadDataAndDisplay();
+            loadingOverlay.Visibility = Visibility.Visible;
+        }
+
+        private void HideLoadingOverlay()
+        {
+            loadingOverlay.Visibility = Visibility.Collapsed;
         }
 
         private async void DataUpdateTimer_Tick(object sender, EventArgs e)
         {
-            // Periodically update data
-            await LoadDataAndDisplay();
+            // Perform your data update or loading here
+            await UpdateDataGrid();
         }
 
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Initial data load
+            await LoadDataAndDisplay();
+            await CoinCapParse.GetCoinData(1, 100, false);
+        }
+        private async Task UpdateDataGrid()
+        {
+            cryptoData = await CoinCapParse.GetCoinData(currentPage, itemsPerPage, true);
+            cryptoListView.ItemsSource = cryptoData;
+        }
         private async Task LoadDataAndDisplay()
         {
-            cryptoData = await CoinCapParse.GetCoinData(currentPage, itemsPerPage);
-            UpdateDataGrid();
+            dataUpdateTimer.Stop();
+            cryptoData = await CoinCapParse.GetCoinData(currentPage, itemsPerPage, false); // Use cached data
+            cryptoListView.ItemsSource = cryptoData;
+            dataUpdateTimer.Start();
         }
-
-        private async void UpdateDataGrid()
-        {
-            cryptoDataGrid.ItemsSource = await CoinCapParse.GetCoinData(currentPage, itemsPerPage);
-        }
-
-
 
         private void PreviousButton_Click(object sender, RoutedEventArgs e)
         {
             if (currentPage > 1)
             {
+                // Fetch the next page data
                 currentPage--;
-                UpdateDataGrid();
+                LoadDataAndDisplay();
             }
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
-           // if (currentPage < Math.Ceiling((double)cryptoData.Count / itemsPerPage))
-            
+            if (currentPage < 10)
+            {
+                // Fetch the next page data
                 currentPage++;
-                UpdateDataGrid();
-            
+                LoadDataAndDisplay();
+            }
         }
-
 
         private void cryptoDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Handle selection changes
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Stop the dataUpdateTimer and release any resources
+            dataUpdateTimer.Stop();
         }
     }
 }

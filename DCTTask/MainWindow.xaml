@@ -7,14 +7,54 @@
             <ColumnDefinition Width="300*"/>
             <ColumnDefinition Width="41*"/>
         </Grid.ColumnDefinitions>
-        <DataGrid x:Name="cryptoDataGrid" AutoGenerateColumns="True" SelectionChanged="cryptoDataGrid_SelectionChanged">
-            <!-- You can customize the appearance of the DataGrid here -->
-        </DataGrid>
+        <ListView x:Name="cryptoListView">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding name}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Symbol" Width="50">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding symbol}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Price (USD)" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding priceUsd}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="24Hr Change (%)" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding changePercent24Hr}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
 
         <!-- Previous Button -->
         <Button Content="Previous" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,10,0,10" Click="PreviousButton_Click"/>
 
         <!-- Next Button -->
         <Button Content="Next" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,10,10,10" Click="NextButton_Click"/>
+
+        <!-- Loading Overlay -->
+        <Grid x:Name="loadingOverlay" Visibility="Collapsed">
+            <Grid.Background>
+                <SolidColorBrush Color="#AA000000"/>
+            </Grid.Background>
+            <TextBlock Text="Loading..." HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+        </Grid>
     </Grid>
 </Window>
