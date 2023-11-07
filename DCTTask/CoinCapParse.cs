@@ -67,6 +67,25 @@ namespace DCTTask
 
             return JsonSerializer.Deserialize<CoinCapResponse>(response).data;
         }
+
+        public static async Task<CoinCapData> GetCoinBySymbol(string symbol)
+        {
+            // Find the coin data with the given symbol in the cached data
+            CoinCapData coinData = cachedData.FirstOrDefault(x => x.symbol.Equals(symbol, StringComparison.OrdinalIgnoreCase));
+
+            if (coinData != null)
+            {
+                // If the coin data is found, fetch more details using its id
+                HttpClient httpClient = new HttpClient();
+                string apiUrl = $"https://api.coincap.io/v2/assets/{coinData.id}";
+                var response = await httpClient.GetStringAsync(apiUrl);
+                return JsonSerializer.Deserialize<CoinCapResponse>(response).data;
+            }
+
+            // Return null if the coin data with the given symbol is not found
+            return null;
+        }
+
         public static async Task<List<CoinCapData>> GetCoinData(int currentPage, int amount, bool refreshData)
         {
             // Initialize cached data if not already done   

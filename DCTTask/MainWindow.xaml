@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:DCTTask"
-        Title="Cryptocurrency Data" Height="400" Width="600">
+        Title="Cryptocurrency Data" Height="450" Width="800">
     <Window.Resources>
         <local:PriceChangeToColorConverter x:Key="PriceChangeToColorConverter" />
 
@@ -20,7 +20,6 @@
             <Setter Property="Foreground" Value="White" />
             <Setter Property="Padding" Value="10,5" />
             <Setter Property="Margin" Value="10" />
-            <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Cursor" Value="Hand" />
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
@@ -31,7 +30,6 @@
 
         <Style TargetType="ListViewItem">
             <Setter Property="Height" Value="27" />
-            <!-- Adjust the desired height -->
             <Setter Property="Padding" Value="5" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="BorderBrush" Value="LightGray" />
@@ -43,7 +41,14 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <ListView x:Name="cryptoListView" Style="{StaticResource CustomListViewStyle}" SelectionChanged="cryptoListView_SelectionChanged">
+        <!-- Search Box and Button -->
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10,10">
+            <TextBox x:Name="searchTextBox" Width="300" Height="20"/>
+            <Button Content="Search" Width="75" Click="SearchButton_Click" Style="{StaticResource CustomButtonStyle}" />
+        </StackPanel>
+
+        <!-- Coin List View -->
+        <ListView x:Name="cryptoListView" Style="{StaticResource CustomListViewStyle}" SelectionChanged="cryptoListView_SelectionChanged" Margin="10,50">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Name" Width="150">
@@ -78,14 +83,12 @@
             </ListView.View>
         </ListView>
 
-        <!-- Previous Button -->
-        <Button Content="Previous" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="PreviousButton_Click" Style="{StaticResource CustomButtonStyle}" />
-
-        <!-- Next Button -->
-        <Button Content="Next" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="NextButton_Click" Style="{StaticResource CustomButtonStyle}" />
-
-        <!-- Page Label -->
-        <TextBlock x:Name="pageLabel" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,10" />
+        <!-- Paging and Loading Overlay -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,10">
+            <Button Content="Previous" Width="75" Click="PreviousButton_Click" Style="{StaticResource CustomButtonStyle}" />
+            <TextBlock x:Name="pageLabel" Margin="10,0" VerticalAlignment="Center" />
+            <Button Content="Next" Width="75" Click="NextButton_Click" Style="{StaticResource CustomButtonStyle}" />
+        </StackPanel>
 
         <!-- Loading Overlay -->
         <Grid x:Name="loadingOverlay" Visibility="Collapsed">
@@ -96,6 +99,6 @@
         </Grid>
 
         <!-- CoinData User Control -->
-        <ContentControl x:Name="coinDataContainer" />
+        <ContentControl x:Name="coinDataContainer" Margin="10" Visibility="Collapsed" />
     </Grid>
 </Window>

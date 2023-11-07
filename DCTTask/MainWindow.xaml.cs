@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -110,6 +112,36 @@ namespace DCTTask
             }
         }
 
+        private async void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            string searchInput = searchTextBox.Text.Trim().ToLower();
+            if (!string.IsNullOrWhiteSpace(searchInput))
+            {
+                // Perform the search using the input (name or ID)
+                CoinCapData foundCoin;
+
+                if (CoinCapParse.GetCoinNames(false).Result.Select(x => x.ToLower()).Contains(searchInput))
+                { 
+                    foundCoin = await CoinCapParse.GetCoinById(searchInput);
+                    // Display the found coin using the CoinData UserControl
+                    coinDataContainer.Content = new CoinData { DataContext = foundCoin };
+                    coinDataContainer.Visibility = Visibility.Visible;
+                }
+                else if (await CoinCapParse.GetCoinBySymbol(searchInput) != null)
+                {
+                    foundCoin = await CoinCapParse.GetCoinBySymbol(searchInput);
+                    // Display the found coin using the CoinData UserControl
+                    coinDataContainer.Content = new CoinData { DataContext = foundCoin };
+                    coinDataContainer.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    MessageBox.Show("Coin not found.");
+                }
+            }
+            searchTextBox.Clear();
+        }
+
 
 
         private void cryptoDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -120,7 +152,8 @@ namespace DCTTask
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             // Stop the dataUpdateTimer and release any resources
-            dataUpdateTimer.Stop();
+            App.Current.Shutdown();
+            Process.GetCurrentProcess().Kill();
         }
 
     }
