@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
 using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DCTTask
 {
@@ -13,6 +14,7 @@ namespace DCTTask
         public CoinCapData data { get; set; }
         public double timestamp { get; set; }
     }
+
     public class CoinCapData
     {
         public string id { get; set; }
@@ -23,12 +25,11 @@ namespace DCTTask
         public string changePercent24Hr { get; set; }
     }
 
-
-
     sealed class CoinNameAssets
     {
         public List<CoinNameData> data { get; set; }
     }
+
     sealed class CoinNameData
     {
         public string id { get; set; }
@@ -36,6 +37,21 @@ namespace DCTTask
         public string name { get; set; }
     }
 
+    public class CandlestickData
+    {
+        public long OpenTime { get; set; }
+        public decimal Open { get; set; }
+        public decimal High { get; set; }
+        public decimal Low { get; set; }
+        public decimal Close { get; set; }
+        public decimal Volume { get; set; }
+        public long CloseTime { get; set; }
+        public decimal QuoteAssetVolume { get; set; }
+        public int NumberOfTrades { get; set; }
+        public decimal TakerBuyBaseAssetVolume { get; set; }
+        public decimal TakerBuyQuoteAssetVolume { get; set; }
+        public string Unused { get; set; }
+    }
 
     public class CoinCapParse
     {
@@ -65,7 +81,7 @@ namespace DCTTask
             var apiUrl = $"https://api.coincap.io/v2/assets/{id}";
             var response = await httpClient.GetStringAsync(apiUrl);
 
-            return JsonSerializer.Deserialize<CoinCapResponse>(response).data;
+            return JsonConvert.DeserializeObject<CoinCapResponse>(response).data;
         }
 
         public static async Task<CoinCapData> GetCoinBySymbol(string symbol)
@@ -79,7 +95,7 @@ namespace DCTTask
                 HttpClient httpClient = new HttpClient();
                 string apiUrl = $"https://api.coincap.io/v2/assets/{coinData.id}";
                 var response = await httpClient.GetStringAsync(apiUrl);
-                return JsonSerializer.Deserialize<CoinCapResponse>(response).data;
+                return JsonConvert.DeserializeObject<CoinCapResponse>(response).data;
             }
 
             // Return null if the coin data with the given symbol is not found
@@ -126,6 +142,45 @@ namespace DCTTask
             return dataSubset;
         }
 
+        public static async Task<List<CandlestickData>> GetCandlestickData(string symbol, string interval, int limit)
+        {
+            HttpClient httpClient = new HttpClient();
+            string apiUrl = $"https://api.binance.com/api/v3/klines?symbol={symbol.ToUpper()}USDT&interval={interval}&limit={limit}";
+
+            var response = await httpClient.GetStringAsync(apiUrl);
+            JArray rawData = JArray.Parse(response);
+
+            // Create a list to store the parsed CandlestickData objects
+            List<CandlestickData> candlestickDataList = new List<CandlestickData>();
+
+            // Loop through the raw data and parse it into CandlestickData objects
+            foreach (JArray item in rawData)
+            {
+                // Check that the inner array has at least 11 elements before parsing
+                if (item.Count >= 11)
+                {
+                    var candlestickData = new CandlestickData
+                    {
+                        OpenTime = Convert.ToInt64(item[0]),
+                        Open = Convert.ToDecimal(item[1]),
+                        High = Convert.ToDecimal(item[2]),
+                        Low = Convert.ToDecimal(item[3]),
+                        Close = Convert.ToDecimal(item[4]),
+                        Volume = Convert.ToDecimal(item[5]),
+                        CloseTime = Convert.ToInt64(item[6]),
+                        QuoteAssetVolume = Convert.ToDecimal(item[7]),
+                        NumberOfTrades = Convert.ToInt32(item[8]),
+                        TakerBuyBaseAssetVolume = Convert.ToDecimal(item[9]),
+                        TakerBuyQuoteAssetVolume = Convert.ToDecimal(item[10]),
+                        Unused = item[11].ToString()
+                    };
+
+                    candlestickDataList.Add(candlestickData);
+                }
+            }
+            return candlestickDataList;
+        }
+
         private static async Task<List<string>> FetchAndCacheCoinNames(string cacheFileName)
         {
             // Fetch coin names from the API
@@ -159,7 +214,7 @@ namespace DCTTask
                     var apiUrl = $"https://api.coincap.io/v2/assets/{coin}";
                     var response = await httpClient.GetStringAsync(apiUrl);
 
-                    CoinCapData coinData = JsonSerializer.Deserialize<CoinCapResponse>(response).data;
+                    CoinCapData coinData = JsonConvert.DeserializeObject<CoinCapResponse>(response).data;
 
                     if (coinData != null)
                         fetchData.Add(coinData);
@@ -179,7 +234,7 @@ namespace DCTTask
             var apiUrl = "https://api.coincap.io/v2/assets";
             HttpClient httpClient = new HttpClient();
             var response = await httpClient.GetStringAsync(apiUrl);
-            var assets = JsonSerializer.Deserialize<CoinNameAssets>(response);
+            var assets = JsonConvert.DeserializeObject<CoinNameAssets>(response);
 
             return assets.data.Select(x => x.id).ToList();
         }
@@ -193,11 +248,8 @@ namespace DCTTask
             }
 
             string filePath = Path.Combine(CacheDirectory, fileName);
-            string json = JsonSerializer.Serialize(data);
+            string json = JsonConvert.SerializeObject(data);
             File.WriteAllText(filePath, json);
         }
     }
-
-
-
 }

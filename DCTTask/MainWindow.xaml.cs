@@ -104,11 +104,11 @@ namespace DCTTask
             {
 
                 // Create an instance of the CoinData user control and set its data context
-                CoinData coinDataControl = new CoinData();
-                coinDataControl.DataContext = (CoinCapData)cryptoListView.SelectedItem; // Set the data context with the selected coin data
+                CoinData coinDataControl = new CoinData { CoinCapData = (CoinCapData)cryptoListView.SelectedItem };
 
                 // Set the content of the coinDataContainer to display the CoinData user control
                 coinDataContainer.Content = coinDataControl;
+                coinDataContainer.Visibility = Visibility.Visible;
             }
         }
 
@@ -124,14 +124,14 @@ namespace DCTTask
                 { 
                     foundCoin = await CoinCapParse.GetCoinById(searchInput);
                     // Display the found coin using the CoinData UserControl
-                    coinDataContainer.Content = new CoinData { DataContext = foundCoin };
+                    coinDataContainer.Content = new CoinData { CoinCapData = foundCoin };
                     coinDataContainer.Visibility = Visibility.Visible;
                 }
                 else if (await CoinCapParse.GetCoinBySymbol(searchInput) != null)
                 {
                     foundCoin = await CoinCapParse.GetCoinBySymbol(searchInput);
                     // Display the found coin using the CoinData UserControl
-                    coinDataContainer.Content = new CoinData { DataContext = foundCoin };
+                    coinDataContainer.Content = new CoinData { CoinCapData = foundCoin };
                     coinDataContainer.Visibility = Visibility.Visible;
                 }
                 else
