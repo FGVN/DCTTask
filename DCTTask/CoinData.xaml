@@ -44,6 +44,30 @@
                 <TextBlock Text="{Binding CoinCapData.changePercent24Hr}" FontSize="16" Margin="0,5" />
                 <!-- Add more controls for other coin details -->
             </StackPanel>
+            <!-- Timeframe Selector -->
+            <ComboBox x:Name="timeframeSelector" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,47,0,0" Width="60"
+                  SelectedIndex="0" SelectionChanged="TimeframeSelector_SelectionChanged" Height="23">
+                <ComboBoxItem Content="1s"/>
+                <ComboBoxItem Content="1m"/>
+                <ComboBoxItem Content="3m"/>
+                <ComboBoxItem Content="5m"/>
+                <ComboBoxItem Content="15m"/>
+                <ComboBoxItem Content="30m"/>
+                <ComboBoxItem Content="1h"/>
+                <ComboBoxItem Content="2h"/>
+                <ComboBoxItem Content="4h"/>
+                <ComboBoxItem Content="6h"/>
+                <ComboBoxItem Content="8h"/>
+                <ComboBoxItem Content="12h"/>
+                <ComboBoxItem Content="1d"/>
+                <ComboBoxItem Content="3d"/>
+                <ComboBoxItem Content="1w"/>
+                <ComboBoxItem Content="1M"/>
+                <ComboBox.SelectedItem>
+                    <ComboBoxItem Content="{Binding TimeFrame, Mode=TwoWay}" />
+                </ComboBox.SelectedItem>
+            </ComboBox>
+
             <lvc:CartesianChart Series="{Binding SeriesCollection}" Margin="266,60,-277,60">
                 <lvc:CartesianChart.AxisX>
                     <lvc:Axis Labels="{Binding Labels}"/>

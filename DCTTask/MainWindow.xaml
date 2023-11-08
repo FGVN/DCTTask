@@ -3,15 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:DCTTask"
         Title="Cryptocurrency Data" Height="450" Width="800">
+
     <Window.Resources>
-        <local:PriceChangeToColorConverter x:Key="PriceChangeToColorConverter" />
+        <local:PercentageConverter x:Key="PercentageConverter"/>
 
         <!-- Custom ListView Style -->
-        <Style x:Key="CustomListViewStyle" TargetType="ListView">
-            <Setter Property="Background" Value="LightGray" />
-            <Setter Property="BorderBrush" Value="DarkGray" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="Margin" Value="10" />
+        <Style x:Key="Windows10ListViewStyle" TargetType="ListView">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
+            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst" />
+            <Setter Property="ScrollViewer.PanningDeceleration" Value="0.4" />
+            <Setter Property="ScrollViewer.PanningRatio" Value="0.6" />
         </Style>
 
         <!-- Custom Button Style -->
@@ -31,11 +37,12 @@
         <Style TargetType="ListViewItem">
             <Setter Property="Height" Value="27" />
             <Setter Property="Padding" Value="5" />
-            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderThickness" Value="0,1,0,0" />
             <Setter Property="BorderBrush" Value="LightGray" />
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="LightBlue" />
+                    <Setter Property="Background" Value="#E5E5E5" />
+                    <!-- Light Gray -->
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -48,40 +55,55 @@
         </StackPanel>
 
         <!-- Coin List View -->
-        <ListView x:Name="cryptoListView" Style="{StaticResource CustomListViewStyle}" SelectionChanged="cryptoListView_SelectionChanged" Margin="10,50">
+        <ListView x:Name="cryptoListView" Style="{StaticResource Windows10ListViewStyle}" SelectionChanged="cryptoListView_SelectionChanged" Margin="10,50">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Name" Width="150">
+                    <GridViewColumn Header="Name">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding name}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Symbol" Width="50">
+                    <GridViewColumn Header="Symbol">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding symbol}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Price (USD)" Width="100">
+                    <GridViewColumn Header="Price (USD)">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding priceUsd}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="24Hr Change (%)" Width="100">
+                    <GridViewColumn Header="24Hr Change (%)">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding changePercent24Hr}" />
+                                <TextBlock Text="{Binding changePercent24Hr}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding changePercent24Hr, Converter={StaticResource PercentageConverter}}" Value="True">
+                                                    <Setter Property="Foreground" Value="Green"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding changePercent24Hr, Converter={StaticResource PercentageConverter}}" Value="False">
+                                                    <Setter Property="Foreground" Value="Red"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
+
+
 
         <!-- Paging and Loading Overlay -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,10">

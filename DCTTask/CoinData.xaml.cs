@@ -9,45 +9,111 @@ using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 using System.Collections.Generic;
 using System.Linq;
+using System.ComponentModel;
 
 namespace DCTTask
 {
-    public partial class CoinData : UserControl
+    public partial class CoinData : UserControl, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler BackButtonClicked;
         private DispatcherTimer updateTimer;
-        private string[] _labels;
-        public SeriesCollection SeriesCollection { get; set; }
-        public CoinCapData CoinCapData { get; set; }
         private List<CandlestickData> candleData;
-        public CoinData()
-        {
-            InitializeComponent();
-            // Initialize and start the data update timer
-            updateTimer = new DispatcherTimer();
-            updateTimer.Interval = TimeSpan.FromSeconds(5); // Update every 5 seconds (adjust as needed)
-            updateTimer.Tick += async (sender, e) => await UpdateData();
-            updateTimer.Start();
 
+        private CoinCapData _coincapdata;
+        public CoinCapData CoinCapData
+        {
+            get { return _coincapdata; }
+            set 
+            {
+                _coincapdata = value;
+                OnPropertyChanged(nameof(CoinCapData));
+            }
         }
 
+        private SeriesCollection _seriesCollection;
+        public SeriesCollection SeriesCollection
+        {
+            get { return _seriesCollection; }
+            set
+            {
+                _seriesCollection = value;
+                OnPropertyChanged(nameof(SeriesCollection)); // Notify UI of changes
+            }
+        }
+
+        private string[] _labels;
         public string[] Labels
         {
             get { return _labels; }
             set
             {
                 _labels = value;
+                OnPropertyChanged(nameof(Labels)); // Notify UI of changes
             }
         }
+        private string _timeFrame;
+
+        public string TimeFrame
+        {
+            get { return _timeFrame; }
+            set
+            {
+                if (_timeFrame != value)
+                {
+                    _timeFrame = value;
+                    OnPropertyChanged(nameof(TimeFrame));
+                }
+            }
+        }
+
+        private bool isChartInit = false;
+        public CoinData()
+        {
+            InitializeComponent();
+            // Initialize and start the data update timer
+            TimeFrame = "15m";
+            InitTimer();
+        }
+
+        
+        private async void InitTimer()
+        {
+            updateTimer = new DispatcherTimer();
+            updateTimer.Interval = TimeSpan.FromSeconds(0); // Update for the first time instantly
+            updateTimer.Tick += async (sender, e) => await UpdateData();
+            updateTimer.Start(); //And then update every 5 seconds
+            updateTimer.Interval = TimeSpan.FromSeconds(5);
+        }
+
         public async Task UpdateData()
         {
             //CoinCapData coinData = DataContext as CoinCapData;
             if (CoinCapData != null)
             {
-                candleData = await CoinCapParse.GetCandlestickData(CoinCapData.symbol, "15m", 60);
+                CoinCapData updatedData = await CoinCapParse.GetCoinById(CoinCapData.id);
+                if (updatedData != null)
+                {
+                    CoinCapData = updatedData;
+                }
+
+                if(isChartInit == false)
+                {
+                    isChartInit = true;
+                    await UpdateChart();
+                }
+
+                DataContext = this;
+            }
+        }
+
+        private async Task UpdateChart()
+        {
+                candleData = await CoinCapParse.GetCandlestickData(CoinCapData.symbol, TimeFrame, 60);
 
                 var ohlc = candleData.Select(data =>
                     new OhlcPoint((double)data.Open, (double)data.High, (double)data.Low, (double)data.Close));
+
                 SeriesCollection = new SeriesCollection
                 {
                     new CandleSeries
@@ -60,25 +126,29 @@ namespace DCTTask
                 Labels = candleData.Select(data =>
                 {
                     DateTime timestamp = DateTimeOffset.FromUnixTimeMilliseconds(data.OpenTime).LocalDateTime;
-                    return timestamp.ToString("HH:mm");
+                    return timestamp.ToString("HH:mm\ndd:MM:yyyy");
                 }).ToArray();
 
-
-
-                CoinCapData updatedData = await CoinCapParse.GetCoinById(CoinCapData.id);
-                if (updatedData != null)
-                {
-                    CoinCapData = updatedData;
-                }
-
-
                 DataContext = this;
-            }
+            
+        }
+
+        private void TimeframeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxItem selectedItem = (ComboBoxItem)timeframeSelector.SelectedItem;
+            TimeFrame = selectedItem.Content.ToString();
+            if(CoinCapData != null)
+                UpdateChart();
+        }
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         // Back button click event handler
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
+            updateTimer.Stop();
             Visibility = Visibility.Collapsed;
         }
     }

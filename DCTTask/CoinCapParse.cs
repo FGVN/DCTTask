@@ -20,9 +20,58 @@ namespace DCTTask
         public string id { get; set; }
         public string symbol { get; set; }
         public string name { get; set; }
-        public string priceUsd { get; set; }
-        public string volumeUsd24Hr { get; set; }
-        public string changePercent24Hr { get; set; }
+
+        private string _price { get; set; }
+
+        public string priceUsd
+        {
+            get
+            {
+                return _price;
+            }
+            set
+            {
+                if (!string.IsNullOrEmpty(value) && value[0] != '0')
+                    _price = value.Substring(0, value.IndexOf('.') + 3);
+                else
+                {
+                    int count = 2;
+                    while (count < value.Length && (!char.IsDigit(value[count]) || value[count] == '0'))
+                    {
+                        count++;
+                    }
+                    if (count + 4 < value.Length)
+                        _price = value.Substring(0, count+4);
+                    else
+                        _price = value.Substring(0, value.Length);
+                }
+            }
+        }
+
+        private string _volume;
+        public string volumeUsd24Hr { 
+            get 
+            { 
+                return _volume;
+            }  
+            set 
+            {
+                _volume = value.Substring(0, value.IndexOf('.') + 3); 
+            } 
+        }
+
+
+        private string _percentChange { get; set; }
+        public string changePercent24Hr {
+            get
+            {
+                return _percentChange;
+            } 
+            set
+            {
+                _percentChange = value.Substring(0, value.IndexOf('.') + 3);
+            }
+        }
     }
 
     sealed class CoinNameAssets
@@ -87,6 +136,7 @@ namespace DCTTask
         public static async Task<CoinCapData> GetCoinBySymbol(string symbol)
         {
             // Find the coin data with the given symbol in the cached data
+
             CoinCapData coinData = cachedData.FirstOrDefault(x => x.symbol.Equals(symbol, StringComparison.OrdinalIgnoreCase));
 
             if (coinData != null)
@@ -107,8 +157,13 @@ namespace DCTTask
             // Initialize cached data if not already done   
             if (cachedData == null)
             {
-                cachedData = new List<CoinCapData>();
+                cachedData = LoadCachedData(CoinDataCacheFile);
             }
+            if(cachedData == new List<CoinCapData>())
+            {
+                cachedData = await FetchDataFromAPI(1, 100);
+            }
+
 
             int startIndex = (currentPage - 1) * amount;
             int endIndex = Math.Min(startIndex + amount, cachedData.Count);
@@ -180,7 +235,7 @@ namespace DCTTask
             }
             return candlestickDataList;
         }
-
+        
         private static async Task<List<string>> FetchAndCacheCoinNames(string cacheFileName)
         {
             // Fetch coin names from the API
@@ -237,6 +292,19 @@ namespace DCTTask
             var assets = JsonConvert.DeserializeObject<CoinNameAssets>(response);
 
             return assets.data.Select(x => x.id).ToList();
+        }
+
+        private static List<CoinCapData> LoadCachedData(string fileName)
+        {
+            string filePath = Path.Combine(CacheDirectory, fileName);
+
+            if (File.Exists(filePath))
+            {
+                string json = File.ReadAllText(filePath);
+                return JsonConvert.DeserializeObject<List<CoinCapData>>(json);
+            }
+
+            return new List<CoinCapData>();
         }
 
         private static void CacheData<T>(string fileName, T data)

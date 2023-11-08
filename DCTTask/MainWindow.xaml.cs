@@ -14,7 +14,7 @@ namespace DCTTask
         private DispatcherTimer dataUpdateTimer;
         private List<CoinCapData> cryptoData;
         private int currentPage = 1;
-        private int itemsPerPage = 10; // Change this value as needed
+        private int itemsPerPage = 10; // Number of items to display
 
         public MainWindow()
         {
@@ -57,9 +57,8 @@ namespace DCTTask
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // Initial data load
-            cryptoData = await CoinCapParse.GetCoinData(currentPage, itemsPerPage, true); 
+            cryptoData = await CoinCapParse.GetCoinData(currentPage, itemsPerPage, false); 
             cryptoListView.ItemsSource = cryptoData;
-            await CoinCapParse.GetCoinData(1, 100, false);
         }
         private async Task UpdateDataGrid()
         {
@@ -118,18 +117,20 @@ namespace DCTTask
             if (!string.IsNullOrWhiteSpace(searchInput))
             {
                 // Perform the search using the input (name or ID)
-                CoinCapData foundCoin;
+                CoinCapData foundCoin = null;
 
+                // Use async/await to avoid blocking the UI thread
                 if (CoinCapParse.GetCoinNames(false).Result.Select(x => x.ToLower()).Contains(searchInput))
-                { 
+                {
                     foundCoin = await CoinCapParse.GetCoinById(searchInput);
-                    // Display the found coin using the CoinData UserControl
-                    coinDataContainer.Content = new CoinData { CoinCapData = foundCoin };
-                    coinDataContainer.Visibility = Visibility.Visible;
                 }
                 else if (await CoinCapParse.GetCoinBySymbol(searchInput) != null)
                 {
                     foundCoin = await CoinCapParse.GetCoinBySymbol(searchInput);
+                }
+
+                if (foundCoin != null)
+                {
                     // Display the found coin using the CoinData UserControl
                     coinDataContainer.Content = new CoinData { CoinCapData = foundCoin };
                     coinDataContainer.Visibility = Visibility.Visible;
@@ -141,6 +142,7 @@ namespace DCTTask
             }
             searchTextBox.Clear();
         }
+
 
 
 
