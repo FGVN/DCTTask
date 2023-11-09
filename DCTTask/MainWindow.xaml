@@ -6,59 +6,20 @@
 
     <Window.Resources>
         <local:PercentageConverter x:Key="PercentageConverter"/>
-
-        <!-- Custom ListView Style -->
-        <Style x:Key="Windows10ListViewStyle" TargetType="ListView">
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
-            <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
-            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst" />
-            <Setter Property="ScrollViewer.PanningDeceleration" Value="0.4" />
-            <Setter Property="ScrollViewer.PanningRatio" Value="0.6" />
-        </Style>
-
-        <!-- Custom Button Style -->
-        <Style x:Key="CustomButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="DodgerBlue" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="Padding" Value="10,5" />
-            <Setter Property="Margin" Value="10" />
-            <Setter Property="Cursor" Value="Hand" />
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="RoyalBlue" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style TargetType="ListViewItem">
-            <Setter Property="Height" Value="27" />
-            <Setter Property="Padding" Value="5" />
-            <Setter Property="BorderThickness" Value="0,1,0,0" />
-            <Setter Property="BorderBrush" Value="LightGray" />
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#E5E5E5" />
-                    <!-- Light Gray -->
-                </Trigger>
-            </Style.Triggers>
-        </Style>
     </Window.Resources>
-    <Grid>
+    <Grid Style="{DynamicResource MainGridStyle}">
         <!-- Search Box and Button -->
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10,10">
-            <TextBox x:Name="searchTextBox" Width="300" Height="20"/>
-            <Button Content="Search" Width="75" Click="SearchButton_Click" Style="{StaticResource CustomButtonStyle}" />
-            
-            <Button Content="Convert" Width="75" Click="ConverterButton_Click" Style="{StaticResource CustomButtonStyle}" />
+            <TextBox x:Name="searchTextBox" Width="300" Height="20" Style="{DynamicResource ComboTextBoxStyle}"/>
+            <Button Content="Search" Width="75" Click="SearchButton_Click" Style="{DynamicResource CustomButtonStyle}" />
+
+            <Button Content="Convert" Width="75" Click="ConverterButton_Click" Style="{DynamicResource CustomButtonStyle}" />
+            <Button Content="Change theme" Width="75" Click="SwitchThemeButton_Click" Style="{DynamicResource CustomButtonStyle}" />
         </StackPanel>
 
 
         <!-- Coin List View -->
-        <ListView x:Name="cryptoListView" Style="{StaticResource Windows10ListViewStyle}" SelectionChanged="cryptoListView_SelectionChanged" Margin="10,50">
+        <ListView x:Name="cryptoListView" Style="{DynamicResource Windows10ListViewStyle}" SelectionChanged="cryptoListView_SelectionChanged" Margin="10,50">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Name">
@@ -110,23 +71,16 @@
 
         <!-- Paging and Loading Overlay -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,10">
-            <Button Content="Previous" Width="75" Click="PreviousButton_Click" Style="{StaticResource CustomButtonStyle}" />
-            <TextBlock x:Name="pageLabel" Margin="10,0" VerticalAlignment="Center" />
-            <Button Content="Next" Width="75" Click="NextButton_Click" Style="{StaticResource CustomButtonStyle}" />
+            <Button Content="Previous" Width="75" Click="PreviousButton_Click" Style="{DynamicResource CustomButtonStyle}" />
+            <TextBlock x:Name="pageLabel" Margin="10,0" VerticalAlignment="Center" Style="{DynamicResource CustomTextBlockStyle}" />
+            <Button Content="Next" Width="75" Click="NextButton_Click" Style="{DynamicResource CustomButtonStyle}" />
         </StackPanel>
 
-        <!-- Loading Overlay -->
-        <Grid x:Name="loadingOverlay" Visibility="Collapsed">
-            <Grid.Background>
-                <SolidColorBrush Color="#AA000000" />
-            </Grid.Background>
-            <TextBlock Text="Loading..." HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" />
-        </Grid>
 
         <!-- CoinData User Control -->
         <ContentControl x:Name="coinDataContainer" Margin="10" Visibility="Collapsed" />
 
-        <!-- Converter User Control -->        
+        <!-- Converter User Control -->
         <ContentControl x:Name="converterContainer" Margin="10" Visibility="Collapsed" />
     </Grid>
 </Window>

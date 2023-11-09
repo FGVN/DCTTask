@@ -65,13 +65,15 @@ namespace DCTTask
             {
                 // Coin is found, set a green background color
                 searchFirstTextBox.Background = new SolidColorBrush(Colors.LightGreen);
+                searchSecondTextBox.Foreground = new SolidColorBrush(Colors.Black);
                 CalculateConvertation();
             }
             else
             {
                 // Coin is not found, clear the TextBox and reset the background color
+                searchFirstTextBox.Background = new SolidColorBrush(Colors.Red);
+                searchFirstTextBox.Foreground = new SolidColorBrush(Colors.Black);
                 searchFirstTextBox.Clear();
-                searchFirstTextBox.Background = new SolidColorBrush(Colors.White);
             }
         }
 
@@ -82,13 +84,15 @@ namespace DCTTask
             {
                 // Coin is found, set a green background color
                 searchSecondTextBox.Background = new SolidColorBrush(Colors.LightGreen);
+                searchSecondTextBox.Foreground = new SolidColorBrush(Colors.Black);
                 CalculateConvertation();
             }
             else
             {
                 // Coin is not found, clear the TextBox and reset the background color
+                searchSecondTextBox.Background = new SolidColorBrush(Colors.Red);
+                searchSecondTextBox.Foreground = new SolidColorBrush(Colors.Black);
                 searchSecondTextBox.Clear();
-                searchSecondTextBox.Background = new SolidColorBrush(Colors.White);
             }
         }
 

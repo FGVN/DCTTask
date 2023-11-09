@@ -1,0 +1,73 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="BackgroundColor" Color="Black"/>
+    <SolidColorBrush x:Key="ForegroundColor" Color="White"/>
+    <SolidColorBrush x:Key="SeconaryColor" Color="DarkOrange"/>
+    <SolidColorBrush x:Key="PrimaryColor" Color="Orange"/>
+
+    <Style x:Key="MainGridStyle" TargetType="Grid">
+        <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
+    </Style>
+
+
+    <Style x:Key="CustomTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+        <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
+    </Style>
+
+    <Style x:Key="ComboTextBoxStyle" TargetType="TextBox">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+        <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
+    </Style>
+
+    <Style x:Key="ComboBoxItemStyle" TargetType="ComboBoxItem">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+        <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
+    </Style>
+
+    <!-- Custom ListView Style -->
+    <Style x:Key="Windows10ListViewStyle" TargetType="ListView">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
+        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst" />
+        <Setter Property="ScrollViewer.PanningDeceleration" Value="0.4" />
+        <Setter Property="ScrollViewer.PanningRatio" Value="0.6" />
+    </Style>
+
+    <!-- Custom Button Style -->
+    <Style x:Key="CustomButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource PrimaryColor}" />
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+        <Setter Property="Padding" Value="10,5" />
+        <Setter Property="Margin" Value="10" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource SeconaryColor}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="ListViewItem">
+        <Setter Property="Height" Value="27" />
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="BorderThickness" Value="0,1,0,0" />
+        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor}" />
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource PrimaryColor}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="GridViewColumnHeader">
+        <Setter Property="Background" Value="{StaticResource BackgroundColor}" />
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+        <!-- Set text color to white -->
+    </Style>
+</ResourceDictionary>

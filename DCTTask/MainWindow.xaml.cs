@@ -15,6 +15,7 @@ namespace DCTTask
         private List<CoinCapData> cryptoData;
         private int currentPage = 1;
         private int itemsPerPage = 10; // Number of items to display
+        
 
         public MainWindow()
         {
@@ -34,15 +35,6 @@ namespace DCTTask
             dataUpdateTimer.Tick += DataUpdateTimer_Tick;
             dataUpdateTimer.Start();
         }
-        private void ShowLoadingOverlay()
-        {
-            loadingOverlay.Visibility = Visibility.Visible;
-        }
-
-        private void HideLoadingOverlay()
-        {
-            loadingOverlay.Visibility = Visibility.Collapsed;
-        }
 
         private async void DataUpdateTimer_Tick(object sender, EventArgs e)
         {
@@ -59,6 +51,7 @@ namespace DCTTask
             // Initial data load
             cryptoData = await CoinCapParse.GetCoinData(currentPage, itemsPerPage, false); 
             cryptoListView.ItemsSource = cryptoData;
+            await CoinCapParse.GetCoinData(1, 100, false);
         }
         private async Task UpdateDataGrid()
         {
@@ -151,6 +144,46 @@ namespace DCTTask
         }
 
 
+        private void SwitchToWhiteTheme()
+        {
+            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary
+            {
+                Source = new Uri("WhiteTheme.xaml", UriKind.Relative)
+            });
+        }
+
+        private void SwitchToDarkTheme()
+        {
+            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary
+            {
+                Source = new Uri("DarkTheme.xaml", UriKind.Relative)
+            });
+        }
+
+        private void SwitchThemeButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Check the current theme, and switch to the opposite theme
+            if (Application.Current.Resources.MergedDictionaries.Any(d => d.Source.ToString() == "WhiteTheme.xaml"))
+            {
+                // Remove the WhiteTheme
+                var whiteTheme = Application.Current.Resources.MergedDictionaries.FirstOrDefault(d => d.Source.ToString() == "WhiteTheme.xaml");
+                if (whiteTheme != null)
+                {
+                    Application.Current.Resources.MergedDictionaries.Remove(whiteTheme);
+                }
+                SwitchToDarkTheme();
+            }
+            else
+            {
+                // Remove the DarkTheme
+                var darkTheme = Application.Current.Resources.MergedDictionaries.FirstOrDefault(d => d.Source.ToString() == "DarkTheme.xaml");
+                if (darkTheme != null)
+                {
+                    Application.Current.Resources.MergedDictionaries.Remove(darkTheme);
+                }
+                SwitchToWhiteTheme();
+            }
+        }
 
         private void cryptoDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

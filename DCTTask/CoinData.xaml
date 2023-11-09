@@ -8,24 +8,10 @@
     
     <!-- Define the layout for the CoinData user control -->
     <UserControl.Resources>
-        <!-- Custom Button Style -->
-        <Style x:Key="CustomButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="DodgerBlue" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="Padding" Value="10,5" />
-            <Setter Property="Margin" Value="10" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Cursor" Value="Hand" />
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="RoyalBlue" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
     </UserControl.Resources>
-    <Grid Background="White">
+    <Grid Style="{StaticResource MainGridStyle}">
         <!-- Navigation Bar -->
-        <Grid Background="DodgerBlue" VerticalAlignment="Top" Height="40">
+        <Grid Background="{StaticResource SeconaryColor}" VerticalAlignment="Top" Height="40">
             <!-- Back Button -->
             <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0" Click="BackButton_Click" Style="{StaticResource CustomButtonStyle}" />
             <!-- Title -->
@@ -38,38 +24,38 @@
             <!-- Coin Data Content -->
             <StackPanel Margin="20,60">
                 <!-- Add controls for displaying coin details -->
-                <TextBlock Text="Symbol: " />
-                <TextBlock Text="{Binding CoinCapData.symbol}" FontSize="12" Margin="0,5" />
+                <TextBlock Text="Symbol: " Foreground="{StaticResource ForegroundColor}"/>
+                <TextBlock Text="{Binding CoinCapData.symbol}" FontSize="12" Margin="0,5" Foreground="{StaticResource ForegroundColor}"/>
 
-                <TextBlock Text="Chart timeframe: " />
+                <TextBlock Text="Chart timeframe: " Foreground="{StaticResource ForegroundColor}"/>
                 <ComboBox x:Name="timeframeSelector" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60" FontSize="12"
-      SelectedIndex="0" SelectionChanged="TimeframeSelector_SelectionChanged" Height="20">
-                    <ComboBoxItem Content="15m"/>
-                    <ComboBoxItem Content="1s"/>
-                    <ComboBoxItem Content="1m"/>
-                    <ComboBoxItem Content="3m"/>
-                    <ComboBoxItem Content="5m"/>
-                    <ComboBoxItem Content="30m"/>
-                    <ComboBoxItem Content="1h"/>
-                    <ComboBoxItem Content="2h"/>
-                    <ComboBoxItem Content="4h"/>
-                    <ComboBoxItem Content="6h"/>
-                    <ComboBoxItem Content="8h"/>
-                    <ComboBoxItem Content="12h"/>
-                    <ComboBoxItem Content="1d"/>
-                    <ComboBoxItem Content="3d"/>
-                    <ComboBoxItem Content="1w"/>
-                    <ComboBoxItem Content="1M"/>
+      SelectedIndex="4" SelectionChanged="TimeframeSelector_SelectionChanged" Height="20" >
+                    <ComboBoxItem Content="1s" Style="{StaticResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="1m" Style="{StaticResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="3m" Style="{StaticResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="5m" Style="{StaticResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="15m" Style="{StaticResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="30m" Style="{StaticResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="1h" Style="{StaticResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="2h" Style="{StaticResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="4h" Style="{StaticResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="6h" Style="{StaticResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="8h" Style="{StaticResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="12h" Style="{StaticResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="1d" Style="{StaticResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="3d" Style="{StaticResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="1w" Style="{StaticResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="1M" Style="{StaticResource ComboBoxItemStyle}"/>
                     <ComboBox.SelectedItem>
-                        <ComboBoxItem Content="{Binding TimeFrame, Mode=TwoWay}" />
+                        <ComboBoxItem Content="{Binding TimeFrame, Mode=TwoWay}"/>
                     </ComboBox.SelectedItem>
                 </ComboBox>
-                <TextBlock Text="Price in USD: " />
-                <TextBlock Text="{Binding CoinCapData.priceUsd}" FontSize="12" Margin="0,5" />
-                <TextBlock Text="24 Hour volume: " />
-                <TextBlock Text="{Binding CoinCapData.volumeUsd24Hr}" FontSize="12" Margin="0,5" />
-                <TextBlock Text="24-hour price change in %: " />
-                <TextBlock Text="{Binding CoinCapData.changePercent24Hr}" FontSize="12" Margin="0,5" />
+                <TextBlock Text="Price in USD: " Foreground="{StaticResource ForegroundColor}"/>
+                <TextBlock Text="{Binding CoinCapData.priceUsd}" FontSize="12" Margin="0,5" Foreground="{StaticResource ForegroundColor}"/>
+                <TextBlock Text="24 Hour volume: " Foreground="{StaticResource ForegroundColor}"/>
+                <TextBlock Text="{Binding CoinCapData.volumeUsd24Hr}" FontSize="12" Margin="0,5" Foreground="{StaticResource ForegroundColor}" />
+                <TextBlock Text="24-hour price change in %: " Foreground="{StaticResource ForegroundColor}" />
+                <TextBlock Text="{Binding CoinCapData.changePercent24Hr}" FontSize="12" Margin="0,5" Foreground="{StaticResource ForegroundColor}" />
 
             </StackPanel>
             <!-- Timeframe Selector -->
@@ -81,7 +67,7 @@
                 </lvc:CartesianChart.AxisX>
             </lvc:CartesianChart>
             
-                <ListView x:Name="marketsListView" Height="300" Margin="0,0,-290,0" Width="210" HorizontalAlignment="Right" FontSize="10">
+                <ListView x:Name="marketsListView" Height="300" Margin="0,0,-290,0" Width="210" HorizontalAlignment="Right" FontSize="10" Style="{StaticResource Windows10ListViewStyle}">
                     <ListView.View>
                         <GridView>
                             <!-- Define columns for the ListView -->

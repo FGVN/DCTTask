@@ -8,26 +8,12 @@
 
     <!-- Define the layout for the CoinData user control -->
     <UserControl.Resources>
-        <!-- Custom Button Style -->
-        <Style x:Key="CustomButtonStyle" TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="DodgerBlue" />
-            <Setter Property="Foreground" Value="White" />
-            <Setter Property="Padding" Value="10,5" />
-            <Setter Property="Margin" Value="10" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Cursor" Value="Hand" />
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="RoyalBlue" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
     </UserControl.Resources>
-    <Grid Background="White">
+    <Grid Style="{StaticResource MainGridStyle}">
         <Button Content="Swap" Grid.Column="1" Height="30" Width="100" Margin="0,50,-500,0" Click="SwapButton_Click"  Style="{StaticResource CustomButtonStyle}" />
 
         <!-- Navigation Bar -->
-        <Grid Background="DodgerBlue" VerticalAlignment="Top" Height="40">
+        <Grid Background="{StaticResource SeconaryColor}" VerticalAlignment="Top" Height="40">
             <!-- Back Button -->
             <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Click="BackButton_Click" Style="{StaticResource CustomButtonStyle}" />
             <!-- Title -->
@@ -40,9 +26,9 @@
                 <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="100" />
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="searchFirstTextBox" Width="100" Grid.Column="0" Margin="0,0,0,0" Height="30" LostFocus="SearchFirstButton_Click"/>
-            <TextBlock Grid.Column="1" Text="You give" Width="100" VerticalAlignment="Center" Margin="0,0,0,0" />
-            <TextBox Grid.Column="1" x:Name="amountTextBox" Text="{Binding Amount}" VerticalAlignment="Center" Margin="83,0,-161,0" Height="30" TextChanged="AmountTextBox_LostFocus" />
+            <TextBox x:Name="searchFirstTextBox" Width="100" Grid.Column="0" Margin="0,0,0,0" Height="30" LostFocus="SearchFirstButton_Click" Style="{StaticResource ComboTextBoxStyle}"/>
+            <TextBlock Grid.Column="1" Text="You give" Width="100" VerticalAlignment="Center" Margin="0,0,0,0"  Foreground="{StaticResource ForegroundColor}"/>
+            <TextBox Grid.Column="1" x:Name="amountTextBox" Text="{Binding Amount}" VerticalAlignment="Center" Margin="83,0,-161,0" Height="30" TextChanged="AmountTextBox_LostFocus" Style="{StaticResource ComboTextBoxStyle}" />
 
         </Grid>
 
@@ -52,9 +38,9 @@
                 <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="100" />
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="searchSecondTextBox" Width="100" Grid.Column="0" Margin="0,0,0,0" Height="30" LostFocus="SearchSecondButton_Click"/>
-            <TextBlock Grid.Column="1" Text="You receive" Width="100" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="1" Text="{Binding Result}" VerticalAlignment="Center" Margin="83,0,-161,0" Height="30" />
+            <TextBox x:Name="searchSecondTextBox" Width="100" Grid.Column="0" Margin="0,0,0,0" Height="30" LostFocus="SearchSecondButton_Click" Style="{StaticResource ComboTextBoxStyle}"/>
+            <TextBlock Grid.Column="1" Text="You receive" Width="100" VerticalAlignment="Center" Foreground="{StaticResource ForegroundColor}"/>
+            <TextBlock Grid.Column="1" Text="{Binding Result}" VerticalAlignment="Center" Margin="83,0,-161,0" Height="30"  Foreground="{StaticResource ForegroundColor}"/>
         </Grid>
     </Grid>
 </UserControl>
