@@ -143,6 +143,12 @@ namespace DCTTask
             searchTextBox.Clear();
         }
 
+        private void ConverterButton_Click(object sender, RoutedEventArgs e)
+        {
+            Converter converter = new Converter();
+            converterContainer.Content = converter;
+            converterContainer.Visibility = Visibility.Visible; 
+        }
 
 
 

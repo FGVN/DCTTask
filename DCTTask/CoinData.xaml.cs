@@ -109,7 +109,17 @@ namespace DCTTask
 
         private async Task UpdateChart()
         {
+            try
+            {
                 candleData = await CoinCapParse.GetCandlestickData(CoinCapData.symbol, TimeFrame, 60);
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show("Sorry, coin is not supported");
+                updateTimer.Stop();
+                Visibility = Visibility.Collapsed;
+                return;
+            }
 
                 var ohlc = candleData.Select(data =>
                     new OhlcPoint((double)data.Open, (double)data.High, (double)data.Low, (double)data.Close));
