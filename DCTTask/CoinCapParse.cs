@@ -320,4 +320,35 @@ namespace DCTTask
             File.WriteAllText(filePath, json);
         }
     }
+
+    public class MarketData
+    {
+        public string exchangeId { get; set; }
+        public string baseId { get; set; }
+        public string quoteId { get; set; }
+        public string baseSymbol { get; set; }
+        public string quoteSymbol { get; set; }
+        public string volumeUsd24Hr { get; set; }
+        public string priceUsd { get; set; }
+        public string volumePercent { get; set; }
+    }
+
+    public class MarketRoot
+    {
+        public List<MarketData> data { get; set; }
+    }
+    public class MarketParse 
+    {
+        public static async Task<List<MarketData>> GetMarket(string coinName)
+        {
+
+            var apiUrl = $"https://api.coincap.io/v2/assets/{coinName}/markets";
+            HttpClient httpClient = new HttpClient();
+            var response = await httpClient.GetStringAsync(apiUrl);
+
+            MarketRoot marketData = JsonConvert.DeserializeObject<MarketRoot>(response);
+
+            return marketData.data;
+        }
+    }
 }

@@ -18,7 +18,14 @@ namespace DCTTask
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler BackButtonClicked;
         private DispatcherTimer updateTimer;
-        private List<CandlestickData> candleData;
+        private List<CandlestickData> candleData; 
+        public class MarketData
+        {
+            public string Exchange { get; set; }
+            public string Pair { get; set; }
+            public string Price { get; set; }
+        }
+
 
         private CoinCapData _coincapdata;
         public CoinCapData CoinCapData
@@ -74,9 +81,25 @@ namespace DCTTask
             // Initialize and start the data update timer
             TimeFrame = "15m";
             InitTimer();
+
         }
 
-        
+        private async Task InitMarketData()
+        {
+            var k = await MarketParse.GetMarket(CoinCapData.id);
+
+            // Create a list of MarketData objects
+            List<MarketData> marketDataList = k.Select(x => new MarketData
+            {
+                Exchange = x.exchangeId,
+                Pair = x.baseSymbol + "/" + x.quoteSymbol,
+                Price = x.priceUsd
+            }).ToList();
+
+            // Set the ItemsSource of the ListView to the list of MarketData objects
+            marketsListView.ItemsSource = marketDataList;
+        }
+
         private async void InitTimer()
         {
             updateTimer = new DispatcherTimer();
@@ -101,6 +124,8 @@ namespace DCTTask
                 {
                     isChartInit = true;
                     await UpdateChart();
+                    Chart.AnimationsSpeed = TimeSpan.FromSeconds(0);
+                    await InitMarketData();
                 }
 
                 DataContext = this;

@@ -4,7 +4,7 @@
     xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av"
     x:Class="DCTTask.Converter"
-    av:DesignHeight="456" av:DesignWidth="741.193">
+    av:DesignHeight="400" av:DesignWidth="700">
 
     <!-- Define the layout for the CoinData user control -->
     <UserControl.Resources>
