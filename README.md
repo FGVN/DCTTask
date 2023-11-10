@@ -19,16 +19,16 @@ WPF app that parses crypto stock exchanges APIs and organizes that data.
 ## Screenshots
 
 ### Main Window Dark Theme
-[![Main Window Dark](https://github.com/FGVN/DCTTask/blob/master/Screenshots/MainWindow_Dark.jpg))
+![Main Window Dark](https://github.com/FGVN/DCTTask/blob/master/Screenshots/MainWindow_Dark.jpg)
 
 ### Coin Data Window
-[![Coin Data](https://github.com/FGVN/DCTTask/blob/master/Screenshots/CoinData.jpg)
+![Coin Data](https://github.com/FGVN/DCTTask/blob/master/Screenshots/CoinData.jpg)
 
 ### Converter with Error
-[![Converter Error](https://github.com/FGVN/DCTTask/blob/master/Screenshots/Converter_Error.jpg)
+![Converter Error](https://github.com/FGVN/DCTTask/blob/master/Screenshots/Converter_Error.jpg)
 
 ### Converter with Success
-[![Converter Success](https://github.com/FGVN/DCTTask/blob/master/Screenshots/Converter_Success.jpg)
+![Converter Success](https://github.com/FGVN/DCTTask/blob/master/Screenshots/Converter_Success.jpg)
 
 ### Main Window Light Theme
-[![Main Window Light](https://github.com/FGVN/DCTTask/blob/master/Screenshots/MainWindow_Light.jpg)
+![Main Window Light](https://github.com/FGVN/DCTTask/blob/master/Screenshots/MainWindow_Light.jpg)
