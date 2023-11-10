@@ -19,16 +19,16 @@ WPF app that parses crypto stock exchanges APIs and organizes that data.
 ## Screenshots
 
 ### Main Window Dark Theme
-[![Main Window Dark](https://imageupload.io/ib/vzVlymUmBsomD70_1699580221.jpg)](https://imageupload.io/kUGpfUwSsxM7emD)
+[![Main Window Dark](https://github.com/FGVN/DCTTask/blob/master/Screenshots/MainWindow_Dark.jpg))
 
 ### Coin Data Window
-[![Coin Data](https://imageupload.io/ib/BHzYVll25u9UD1M_1699580787.jpg)](https://imageupload.io/KJSi3cdLv4Ey3E2)
+[![Coin Data](https://github.com/FGVN/DCTTask/blob/master/Screenshots/CoinData.jpg)
 
 ### Converter with Error
-[![Converter Error](https://imageupload.io/ib/IPZilspFn2j0tqS_1699580893.jpg)](https://imageupload.io/quWysOCVQ7Hn2t1)
+[![Converter Error](https://github.com/FGVN/DCTTask/blob/master/Screenshots/Converter_Error.jpg)
 
 ### Converter with Success
-[![Converter Success](https://imageupload.io/ib/FgVtbPIFdhwKZSW_1699580921.jpg)](https://imageupload.io/F1ey6lvQVQFKb4i)
+[![Converter Success](https://github.com/FGVN/DCTTask/blob/master/Screenshots/Converter_Success.jpg)
 
 ### Main Window Light Theme
-<a target="_blank" href="https://imageupload.io/sDXKoGQhZGYyYy9"><img  src="https://imageupload.io/ib/8nqntcpcHvgYqCc_1699581111.jpg" alt="MainWindow_Light.jpg"/></a>
+[![Main Window Light](https://github.com/FGVN/DCTTask/blob/master/Screenshots/MainWindow_Light.jpg)
