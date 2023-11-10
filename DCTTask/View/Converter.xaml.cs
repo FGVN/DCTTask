@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using DCTTask.Services;
+using DCTTask.Model;
 using DCTTask.ViewModel;
 
 namespace DCTTask.View
@@ -24,58 +26,52 @@ namespace DCTTask.View
 
         private async void SearchFirstButton_Click(object sender, RoutedEventArgs e)
         {
-            viewModel.from = await viewModel.Search(searchFirstTextBox.Text.Trim().ToLower());
-
-            if (viewModel.from != null)
-            {
-                // Coin is found, set a green background color
-                searchFirstTextBox.Background = new SolidColorBrush(Colors.LightGreen);
-                searchFirstTextBox.Foreground = new SolidColorBrush(Colors.Black);
-                viewModel.CalculateConvertation(amountTextBox.Text);
-            }
-            else
-            {
-                // Coin is not found, clear the TextBox and reset the background color
-                searchFirstTextBox.Background = new SolidColorBrush(Colors.Red);
-                searchFirstTextBox.Foreground = new SolidColorBrush(Colors.Black);
-                searchFirstTextBox.Clear();
-            }
+            viewModel.from = await CoinCapApiClient.SearchByNameOrSymbolAsync(searchFirstTextBox.Text);
+            SearchBoxHadnler(searchFirstTextBox, viewModel.from);
         }
 
         private async void SearchSecondButton_Click(object sender, RoutedEventArgs e)
         {
 
-            viewModel.to = await viewModel.Search(searchSecondTextBox.Text.Trim().ToLower());
+            viewModel.to = await CoinCapApiClient.SearchByNameOrSymbolAsync(searchSecondTextBox.Text);
+            SearchBoxHadnler(searchSecondTextBox, viewModel.to);
+        }
 
-            if (viewModel.to != null)
+        private async void SearchBoxHadnler(TextBox textBox, object toFind)
+        {
+
+            if (toFind != null)
             {
                 // Coin is found, set a green background color
-                searchSecondTextBox.Background = new SolidColorBrush(Colors.LightGreen);
-                searchSecondTextBox.Foreground = new SolidColorBrush(Colors.Black);
+                textBox.Background = new SolidColorBrush(Colors.LightGreen);
+                textBox.Foreground = new SolidColorBrush(Colors.Black);
+                textBox.Text = textBox.Text.ToUpper();
                 viewModel.CalculateConvertation(amountTextBox.Text);
             }
             else
             {
                 // Coin is not found, clear the TextBox and reset the background color
-                searchSecondTextBox.Background = new SolidColorBrush(Colors.Red);
-                searchSecondTextBox.Foreground = new SolidColorBrush(Colors.Black);
-                searchSecondTextBox.Clear();
+                if(textBox.Text != "")
+                {
+                    textBox.Background = new SolidColorBrush(Colors.Red);
+                    textBox.Foreground = new SolidColorBrush(Colors.Black);
+                    MessageBox.Show("Coin not found");
+                    textBox.Clear();
+                }
             }
         }
 
         private void SwapButton_Click(object sender, RoutedEventArgs e)
         {
-            viewModel.Swap();
 
-            if (viewModel.from != null)
+            if (viewModel.from != null && viewModel.to != null)
+            {
+                viewModel.Swap();
+
                 searchFirstTextBox.Text = viewModel.from.symbol;
-            else
-                searchFirstTextBox.Clear();
-
-            if (viewModel.to!= null)
                 searchSecondTextBox.Text = viewModel.to.symbol;
-            else
-                searchSecondTextBox.Clear();
+
+            }
         }
 
 

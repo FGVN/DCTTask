@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.IO;
 using DCTTask.Model;
 using DCTTask.ViewModel;
+using DCTTask.Services;
 
 namespace DCTTask.View
 {
@@ -14,36 +15,37 @@ namespace DCTTask.View
         private MainWindowViewModel viewModel;
         public MainWindow()
         {
-
             InitializeComponent();
             viewModel = new MainWindowViewModel();
-            Loaded += MainWindow_Loaded;
+            DataContext = viewModel; 
+            viewModel.InitialLoad(cryptoListView);
             Closing += MainWindow_Closing; // Handle the Closing event
             UpdatePageLabel();
         }
 
 
-        private void PreviousButton_Click(object sender, RoutedEventArgs e)
+        private async void PreviousButton_Click(object sender, RoutedEventArgs e)
         {
-            if (viewModel.currentPage > 1)
+            if (viewModel.CurrentPage > 1)
             {
-                // Fetch the next page data
-                viewModel.currentPage--;
+                // Fetch the previous page data
+                viewModel.CurrentPage--;
                 UpdatePageLabel();
-                viewModel.LoadDataAndDisplay();
+                await viewModel.LoadDataAndDisplay();
             }
         }
 
-        private void NextButton_Click(object sender, RoutedEventArgs e)
+        private async void NextButton_Click(object sender, RoutedEventArgs e)
         {
-            if (viewModel.currentPage < 10)
+            if (viewModel.CurrentPage < 10)
             {
                 // Fetch the next page data
-                viewModel.currentPage++;
+                viewModel.CurrentPage++;
                 UpdatePageLabel();
-                viewModel.LoadDataAndDisplay();
+                await viewModel.LoadDataAndDisplay();
             }
         }
+
         private void cryptoListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cryptoListView.SelectedItem != null)
@@ -58,31 +60,22 @@ namespace DCTTask.View
             }
         }
 
-        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Initial data load
-            await viewModel.InitialLoad(cryptoListView);
-        }
-
         private async void SearchButton_Click(object sender, RoutedEventArgs e)
         {
             string searchInput = searchTextBox.Text.Trim().ToLower();
-            if (!string.IsNullOrWhiteSpace(searchInput))
+            CoinCapData toSearch = await CoinCapApiClient.SearchByNameOrSymbolAsync(searchInput);
+
+            if (toSearch != null)
             {
-                CoinCapData foundCoin = await viewModel.Search(searchInput);
-
-
-                if (foundCoin != null)
-                {
-                    // Display the found coin using the CoinData UserControl
-                    coinDataContainer.Content = new CoinData(foundCoin);
-                    coinDataContainer.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    MessageBox.Show("Coin not found.");
-                }
+                // Display the found coin using the CoinData UserControl
+                coinDataContainer.Content = new CoinData(toSearch);
+                coinDataContainer.Visibility = Visibility.Visible;
             }
+            else
+            {
+                MessageBox.Show("Coin not found.");
+            }
+
             searchTextBox.Clear();
         }
 
@@ -138,7 +131,7 @@ namespace DCTTask.View
 
         private void UpdatePageLabel()
         {
-            pageLabel.Text = $"Page {viewModel.currentPage} of 10"; 
+            pageLabel.Text = $"Page {viewModel.CurrentPage} of 10"; 
         }
 
 

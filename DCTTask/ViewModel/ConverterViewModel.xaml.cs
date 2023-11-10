@@ -78,34 +78,6 @@ namespace DCTTask.ViewModel
         }
 
 
-        public async Task<CoinCapData> Search(string searchInput)
-        {
-            if (!string.IsNullOrWhiteSpace(searchInput))
-            {
-                CoinCapData foundCoin = null;
-
-                if ((await CoinCapParse.GetCoinNames(false)).Select(x => x.ToLower()).Contains(searchInput))
-                {
-                    foundCoin = await CoinCapParse.GetCoinById(searchInput);
-                }
-                else if (await CoinCapParse.GetCoinBySymbol(searchInput) != null)
-                {
-                    foundCoin = await CoinCapParse.GetCoinBySymbol(searchInput);
-                }
-
-                if (foundCoin != null)
-                {
-                    return foundCoin;
-                }
-                else
-                {
-                    MessageBox.Show("Coin not found.");
-                }
-            }
-            return null;
-        }
-
-
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

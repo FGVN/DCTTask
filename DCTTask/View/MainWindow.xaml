@@ -4,7 +4,6 @@
         xmlns:local="clr-namespace:DCTTask"
         xmlns:model="clr-namespace:DCTTask.Model"
         Title="Cryptocurrency Data" Height="450" Width="800">
-
     <Window.Resources>
         <model:PercentageConverter x:Key="PercentageConverter" />
     </Window.Resources>

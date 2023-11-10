@@ -114,7 +114,7 @@ namespace DCTTask.ViewModel
         {
             if (Coin != null)
             {
-                CoinCapData updatedData = await CoinCapParse.GetCoinById(Coin.id);
+                CoinCapData updatedData = await CoinCapApiService.GetCoinByIdAsync(Coin.id);
                 if (updatedData != null)
                 {
                     Coin = updatedData;
@@ -175,11 +175,5 @@ namespace DCTTask.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        // Back button click event handler
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            updateTimer.Stop();
-            Visibility = Visibility.Collapsed;
-        }
     }
 }

@@ -1,80 +1,85 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using DCTTask.Services;
 using DCTTask.Model;
+using DCTTask.Services;
 
 namespace DCTTask.ViewModel
 {
-    public class MainWindowViewModel : Window
+    public class MainWindowViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private DispatcherTimer dataUpdateTimer;
         private List<CoinCapData> cryptoData;
-        public int currentPage = 1;
+        private int currentPage;
         private int itemsPerPage = 10; // Number of items to display
-        private int maxPages = 10; 
-        private static ListView cryptoListView;
-        
+        private int maxPages = 10;
+        private ListView cryptoListView;
 
-        private void InitTimer()
+        public int CurrentPage
+        {
+            get { return currentPage; }
+            set
+            {
+                if (currentPage != value)
+                {
+                    currentPage = value;
+                    OnPropertyChanged(nameof(CurrentPage));
+                }
+            }
+        }
+
+        public MainWindowViewModel()
+        {
+            CurrentPage = 1;
+            InitTimer();
+        }
+
+        private async void InitTimer()
         {
             dataUpdateTimer = new DispatcherTimer();
-            dataUpdateTimer.Interval = TimeSpan.FromSeconds(0); 
-            dataUpdateTimer.Tick += DataUpdateTimer_Tick; 
-            dataUpdateTimer.Interval = TimeSpan.FromSeconds(5);// Update every 5 seconds
+            dataUpdateTimer.Interval = TimeSpan.FromSeconds(5); // Update every 5 seconds
+            dataUpdateTimer.Tick += async (sender, e) =>
+            {
+                await UpdateDataGrid();
+                await LoadDataAndDisplay();
+            };
             dataUpdateTimer.Start();
         }
 
         private async void DataUpdateTimer_Tick(object sender, EventArgs e)
         {
             await UpdateDataGrid();
-
-            //We do that so the updated data wont overlap with the data needed for the page when they are cahnged
             await LoadDataAndDisplay();
         }
 
         public async Task InitialLoad(ListView _cryptoListView)
         {
-            // Initial data load
-            InitTimer();
-
             cryptoListView = _cryptoListView;
-            cryptoData = await CoinCapParse.GetCoinData(currentPage, itemsPerPage, false); 
+            cryptoData = await CoinCapParse.GetCoinDataAsync(CurrentPage, itemsPerPage, false);
             cryptoListView.ItemsSource = cryptoData;
-            await CoinCapParse.GetCoinData(1, itemsPerPage * maxPages, false);
+            await CoinCapParse.GetCoinDataAsync(1, itemsPerPage * maxPages, false);
         }
+
         public async Task UpdateDataGrid()
         {
-            cryptoData = await CoinCapParse.GetCoinData(currentPage, itemsPerPage, true);
+            await CoinCapParse.GetCoinDataAsync(CurrentPage, itemsPerPage, true);
             cryptoListView.ItemsSource = cryptoData;
         }
+
         public async Task LoadDataAndDisplay()
         {
-            dataUpdateTimer.Stop();
-            cryptoData = await CoinCapParse.GetCoinData(currentPage, itemsPerPage, false); // Use cached data
+            cryptoData = await CoinCapParse.GetCoinDataAsync(CurrentPage, itemsPerPage, false);
             cryptoListView.ItemsSource = cryptoData;
-            dataUpdateTimer.Start();
         }
 
-
-        public async Task<CoinCapData> Search(string searchInput)
+        protected virtual void OnPropertyChanged(string propertyName)
         {
-            CoinCapData foundCoin = null;
-
-            if ((await CoinCapParse.GetCoinNames(false)).Select(x => x.ToLower()).Contains(searchInput))
-            {
-                foundCoin = await CoinCapParse.GetCoinById(searchInput);
-            }
-            else if (await CoinCapParse.GetCoinBySymbol(searchInput) != null)
-            {
-                foundCoin = await CoinCapParse.GetCoinBySymbol(searchInput);
-            }
-
-            return foundCoin;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
