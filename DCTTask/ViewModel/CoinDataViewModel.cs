@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using LiveCharts;
@@ -10,14 +9,16 @@ using LiveCharts.Wpf;
 using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel;
+using DCTTask.Services;
+using DCTTask.Model;
 
-namespace DCTTask
+namespace DCTTask.ViewModel
 {
-    public partial class CoinData : UserControl, INotifyPropertyChanged
+    public class CoinDataViewModel : UserControl, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler BackButtonClicked;
-        private DispatcherTimer updateTimer;
+        public DispatcherTimer updateTimer;
         private List<CandlestickData> candleData; 
         public class MarketData
         {
@@ -27,13 +28,13 @@ namespace DCTTask
         }
 
 
-        private CoinCapData _coincapdata;
-        public CoinCapData CoinCapData
+        private CoinCapData _coin;
+        public CoinCapData Coin
         {
-            get { return _coincapdata; }
+            get { return _coin; }
             set 
             {
-                _coincapdata = value;
+                _coin = value;
                 OnPropertyChanged(nameof(CoinCapData));
             }
         }
@@ -75,21 +76,21 @@ namespace DCTTask
         }
 
         private bool isChartInit = false;
-        public CoinData()
+        public CoinDataViewModel(CoinCapData coin)
         {
-            InitializeComponent();
+            Coin = coin;
             // Initialize and start the data update timer
             TimeFrame = "15m";
+            UpdateData();
             InitTimer();
 
         }
 
-        private async Task InitMarketData()
+        public async Task<List<MarketData>> InitMarketData()
         {
-            var k = await MarketParse.GetMarket(CoinCapData.id);
 
             // Create a list of MarketData objects
-            List<MarketData> marketDataList = k.Select(x => new MarketData
+            List<MarketData> marketDataList = (await MarketParse.GetMarket(Coin.id)).Select(x => new MarketData
             {
                 Exchange = x.exchangeId,
                 Pair = x.baseSymbol + "/" + x.quoteSymbol,
@@ -97,7 +98,7 @@ namespace DCTTask
             }).ToList();
 
             // Set the ItemsSource of the ListView to the list of MarketData objects
-            marketsListView.ItemsSource = marketDataList;
+            return marketDataList;
         }
 
         private async void InitTimer()
@@ -111,20 +112,17 @@ namespace DCTTask
 
         public async Task UpdateData()
         {
-            //CoinCapData coinData = DataContext as CoinCapData;
-            if (CoinCapData != null)
+            if (Coin != null)
             {
-                CoinCapData updatedData = await CoinCapParse.GetCoinById(CoinCapData.id);
+                CoinCapData updatedData = await CoinCapParse.GetCoinById(Coin.id);
                 if (updatedData != null)
                 {
-                    CoinCapData = updatedData;
+                    Coin = updatedData;
                 }
 
                 if(isChartInit == false)
                 {
                     isChartInit = true;
-                    await UpdateChart();
-                    Chart.AnimationsSpeed = TimeSpan.FromSeconds(0);
                     await InitMarketData();
                 }
 
@@ -136,13 +134,11 @@ namespace DCTTask
         {
             try
             {
-                candleData = await CoinCapParse.GetCandlestickData(CoinCapData.symbol, TimeFrame, 60);
+                candleData = await BinanceParse.GetCandlestickData(Coin.symbol, TimeFrame, 60);
             }
             catch (Exception ex) 
             {
-                MessageBox.Show("Sorry, coin is not supported");
-                updateTimer.Stop();
-                Visibility = Visibility.Collapsed;
+                MessageBox.Show("Sorry, coin chart is not supported");
                 return;
             }
 
@@ -168,11 +164,10 @@ namespace DCTTask
             
         }
 
-        private void TimeframeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void TimeframeSelector_SelectionChanged(ComboBoxItem selectedItem)
         {
-            ComboBoxItem selectedItem = (ComboBoxItem)timeframeSelector.SelectedItem;
             TimeFrame = selectedItem.Content.ToString();
-            if(CoinCapData != null)
+            if(Coin != null)
                 UpdateChart();
         }
         private void OnPropertyChanged(string propertyName)

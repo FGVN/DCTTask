@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av"
-    x:Class="DCTTask.Converter"
+    x:Class="DCTTask.View.Converter"
     av:DesignHeight="400" av:DesignWidth="700">
 
     <!-- Define the layout for the CoinData user control -->
