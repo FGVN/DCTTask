@@ -4,16 +4,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av"
-             av:DesignHeight="400" av:DesignWidth="700">
+             av:DesignHeight="400" av:DesignWidth="720">
     
     <!-- Define the layout for the CoinData user control -->
     <UserControl.Resources>
     </UserControl.Resources>
-    <Grid Style="{StaticResource MainGridStyle}">
+    <Grid Style="{DynamicResource MainGridStyle}">
         <!-- Navigation Bar -->
-        <Grid Background="{StaticResource SeconaryColor}" VerticalAlignment="Top" Height="40">
+        <Grid Background="{DynamicResource SeconaryColor}" VerticalAlignment="Top" Height="40">
             <!-- Back Button -->
-            <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0" Click="BackButton_Click" Style="{StaticResource CustomButtonStyle}" />
+            <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0" Click="BackButton_Click" Style="{DynamicResource CustomButtonStyle}" />
             <!-- Title -->
 
             <TextBlock Text="{Binding Coin.name}" FontSize="20" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" />
@@ -24,38 +24,38 @@
             <!-- Coin Data Content -->
             <StackPanel Margin="20,60">
                 <!-- Add controls for displaying coin details -->
-                <TextBlock Text="Symbol: " Foreground="{StaticResource ForegroundColor}"/>
-                <TextBlock Text="{Binding Coin.symbol}" FontSize="12" Margin="0,5" Foreground="{StaticResource ForegroundColor}"/>
+                <TextBlock Text="Symbol: " Foreground="{DynamicResource ForegroundColor}"/>
+                <TextBlock Text="{Binding Coin.symbol}" FontSize="12" Margin="0,5" Foreground="{DynamicResource ForegroundColor}"/>
 
-                <TextBlock Text="Chart timeframe: " Foreground="{StaticResource ForegroundColor}"/>
+                <TextBlock Text="Chart timeframe: " Foreground="{DynamicResource ForegroundColor}"/>
                 <ComboBox x:Name="timeframeSelector" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60" FontSize="12"
       SelectedIndex="4" SelectionChanged="TimeframeSelector_SelectionChanged" Height="20" >
-                    <ComboBoxItem Content="1s" Style="{StaticResource ComboBoxItemStyle}"/>
-                    <ComboBoxItem Content="1m" Style="{StaticResource ComboBoxItemStyle}"/>
-                    <ComboBoxItem Content="3m" Style="{StaticResource ComboBoxItemStyle}"/>
-                    <ComboBoxItem Content="5m" Style="{StaticResource ComboBoxItemStyle}"/>
-                    <ComboBoxItem Content="15m" Style="{StaticResource ComboBoxItemStyle}"/>
-                    <ComboBoxItem Content="30m" Style="{StaticResource ComboBoxItemStyle}"/>
-                    <ComboBoxItem Content="1h" Style="{StaticResource ComboBoxItemStyle}"/>
-                    <ComboBoxItem Content="2h" Style="{StaticResource ComboBoxItemStyle}"/>
-                    <ComboBoxItem Content="4h" Style="{StaticResource ComboBoxItemStyle}"/>
-                    <ComboBoxItem Content="6h" Style="{StaticResource ComboBoxItemStyle}"/>
-                    <ComboBoxItem Content="8h" Style="{StaticResource ComboBoxItemStyle}"/>
-                    <ComboBoxItem Content="12h" Style="{StaticResource ComboBoxItemStyle}"/>
-                    <ComboBoxItem Content="1d" Style="{StaticResource ComboBoxItemStyle}"/>
-                    <ComboBoxItem Content="3d" Style="{StaticResource ComboBoxItemStyle}"/>
-                    <ComboBoxItem Content="1w" Style="{StaticResource ComboBoxItemStyle}"/>
-                    <ComboBoxItem Content="1M" Style="{StaticResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="1s" Style="{DynamicResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="1m" Style="{DynamicResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="3m" Style="{DynamicResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="5m" Style="{DynamicResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="15m" Style="{DynamicResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="30m" Style="{DynamicResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="1h" Style="{DynamicResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="2h" Style="{DynamicResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="4h" Style="{DynamicResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="6h" Style="{DynamicResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="8h" Style="{DynamicResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="12h" Style="{DynamicResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="1d" Style="{DynamicResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="3d" Style="{DynamicResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="1w" Style="{DynamicResource ComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="1M" Style="{DynamicResource ComboBoxItemStyle}"/>
                     <ComboBox.SelectedItem>
                         <ComboBoxItem Content="{Binding TimeFrame, Mode=TwoWay}"/>
                     </ComboBox.SelectedItem>
                 </ComboBox>
-                <TextBlock Text="Price in USD: " Foreground="{StaticResource ForegroundColor}"/>
-                <TextBlock Text="{Binding Coin.priceUsd}" FontSize="12" Margin="0,5" Foreground="{StaticResource ForegroundColor}"/>
-                <TextBlock Text="24 Hour volume: " Foreground="{StaticResource ForegroundColor}"/>
-                <TextBlock Text="{Binding Coin.volumeUsd24Hr}" FontSize="12" Margin="0,5" Foreground="{StaticResource ForegroundColor}" />
-                <TextBlock Text="24-hour price change in %: " Foreground="{StaticResource ForegroundColor}" />
-                <TextBlock Text="{Binding Coin.changePercent24Hr}" FontSize="12" Margin="0,5" Foreground="{StaticResource ForegroundColor}" />
+                <TextBlock Text="Price in USD: " Foreground="{DynamicResource ForegroundColor}"/>
+                <TextBlock Text="{Binding Coin.priceUsd}" FontSize="12" Margin="0,5" Foreground="{DynamicResource ForegroundColor}"/>
+                <TextBlock Text="24 Hour volume: " Foreground="{DynamicResource ForegroundColor}"/>
+                <TextBlock Text="{Binding Coin.volumeUsd24Hr}" FontSize="12" Margin="0,5" Foreground="{DynamicResource ForegroundColor}" />
+                <TextBlock Text="24-hour price change in %: " Foreground="{DynamicResource ForegroundColor}" />
+                <TextBlock Text="{Binding Coin.changePercent24Hr}" FontSize="12" Margin="0,5" Foreground="{DynamicResource ForegroundColor}" />
 
             </StackPanel>
             <!-- Timeframe Selector -->
@@ -67,7 +67,7 @@
                 </lvc:CartesianChart.AxisX>
             </lvc:CartesianChart>
             
-                <ListView x:Name="marketsListView" Height="300" Margin="0,0,-290,0" Width="210" HorizontalAlignment="Right" FontSize="10" Style="{StaticResource Windows10ListViewStyle}">
+                <ListView x:Name="marketsListView" Height="300" Margin="0,0,-285,0" Width="210" HorizontalAlignment="Right" FontSize="10" Style="{DynamicResource Windows10ListViewStyle}">
                     <ListView.View>
                         <GridView>
                             <!-- Define columns for the ListView -->

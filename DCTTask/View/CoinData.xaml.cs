@@ -18,14 +18,16 @@ namespace DCTTask.View
             DataContext = viewModel;
 
             InitializeComponent();
+
             InitMarket();
+
             Chart.AnimationsSpeed = TimeSpan.FromSeconds(0);
 
         }
 
         private async void InitMarket()
         {
-            marketsListView.ItemsSource = await viewModel.InitMarketData();
+            marketsListView.ItemsSource = await viewModel.GetMarketData();
         }
         // Back button click event handler
         private void BackButton_Click(object sender, RoutedEventArgs e)

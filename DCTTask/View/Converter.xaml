@@ -4,18 +4,18 @@
     xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av"
     x:Class="DCTTask.View.Converter"
-    av:DesignHeight="400" av:DesignWidth="700">
+    av:DesignHeight="480" av:DesignWidth="800">
 
     <!-- Define the layout for the CoinData user control -->
     <UserControl.Resources>
     </UserControl.Resources>
-    <Grid Style="{StaticResource MainGridStyle}">
-        <Button Content="Swap" Grid.Column="1" Height="30" Width="100" Margin="0,50,-500,0" Click="SwapButton_Click"  Style="{StaticResource CustomButtonStyle}" />
+    <Grid Style="{DynamicResource MainGridStyle}">
+        <Button Content="Swap" Grid.Column="1" Height="30" Width="100" Margin="0,50,-500,0" Click="SwapButton_Click"  Style="{DynamicResource CustomButtonStyle}" />
 
         <!-- Navigation Bar -->
-        <Grid Background="{StaticResource SeconaryColor}" VerticalAlignment="Top" Height="40">
+        <Grid Background="{DynamicResource SeconaryColor}" VerticalAlignment="Top" Height="40">
             <!-- Back Button -->
-            <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Click="BackButton_Click" Style="{StaticResource CustomButtonStyle}" />
+            <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Click="BackButton_Click" Style="{DynamicResource CustomButtonStyle}" />
             <!-- Title -->
             <TextBlock Text="Convert" FontSize="20" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" />
         </Grid>
@@ -26,9 +26,9 @@
                 <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="100" />
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="searchFirstTextBox" Width="100" Grid.Column="0" Margin="0,0,0,0" Height="30" LostFocus="SearchFirstButton_Click" Style="{StaticResource ComboTextBoxStyle}"/>
-            <TextBlock Grid.Column="1" Text="You give" Width="100" VerticalAlignment="Center" Margin="0,0,0,0"  Foreground="{StaticResource ForegroundColor}"/>
-            <TextBox Grid.Column="1" x:Name="amountTextBox" Text="{Binding Amount}" VerticalAlignment="Center" Margin="83,0,-161,0" Height="30" TextChanged="AmountTextBox_LostFocus" Style="{StaticResource ComboTextBoxStyle}" />
+            <TextBox x:Name="searchFirstTextBox" Width="100" Grid.Column="0" Margin="0,0,0,0" Height="30" LostFocus="SearchFirstButton_Click" Style="{DynamicResource ComboTextBoxStyle}"/>
+            <TextBlock Grid.Column="1" Text="You give" Width="100" VerticalAlignment="Center" Margin="0,0,0,0"  Foreground="{DynamicResource ForegroundColor}"/>
+            <TextBox Grid.Column="1" x:Name="amountTextBox" Text="{Binding Amount}" VerticalAlignment="Center" Margin="83,0,-161,0" Height="30" TextChanged="AmountTextBox_LostFocus" Style="{DynamicResource ComboTextBoxStyle}" />
 
         </Grid>
 
@@ -38,9 +38,9 @@
                 <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="100" />
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="searchSecondTextBox" Width="100" Grid.Column="0" Margin="0,0,0,0" Height="30" LostFocus="SearchSecondButton_Click" Style="{StaticResource ComboTextBoxStyle}"/>
-            <TextBlock Grid.Column="1" Text="You receive" Width="100" VerticalAlignment="Center" Foreground="{StaticResource ForegroundColor}"/>
-            <TextBlock Grid.Column="1" Text="{Binding Result}" VerticalAlignment="Center" Margin="83,0,-161,0" Height="30"  Foreground="{StaticResource ForegroundColor}"/>
+            <TextBox x:Name="searchSecondTextBox" Width="100" Grid.Column="0" Margin="0,0,0,0" Height="30" LostFocus="SearchSecondButton_Click" Style="{DynamicResource ComboTextBoxStyle}"/>
+            <TextBlock Grid.Column="1" Text="You receive" Width="100" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundColor}"/>
+            <TextBlock Grid.Column="1" Text="{Binding Result}" VerticalAlignment="Center" Margin="83,0,-161,0" Height="30"  Foreground="{DynamicResource ForegroundColor}"/>
         </Grid>
     </Grid>
 </UserControl>

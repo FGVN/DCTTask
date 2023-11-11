@@ -35,7 +35,7 @@ namespace DCTTask.ViewModel
             set 
             {
                 _coin = value;
-                OnPropertyChanged(nameof(CoinCapData));
+                OnPropertyChanged(nameof(Coin));
             }
         }
 
@@ -83,10 +83,9 @@ namespace DCTTask.ViewModel
             TimeFrame = "15m";
             UpdateData();
             InitTimer();
-
         }
 
-        public async Task<List<MarketData>> InitMarketData()
+        public async Task<List<MarketData>> GetMarketData()
         {
 
             // Create a list of MarketData objects
@@ -123,7 +122,6 @@ namespace DCTTask.ViewModel
                 if(isChartInit == false)
                 {
                     isChartInit = true;
-                    await InitMarketData();
                 }
 
                 DataContext = this;

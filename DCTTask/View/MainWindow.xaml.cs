@@ -13,6 +13,8 @@ namespace DCTTask.View
     partial class MainWindow : Window
     {
         private MainWindowViewModel viewModel;
+        private double minWidth = 800;
+        private double minHeight = 480;
         public MainWindow()
         {
             InitializeComponent();
@@ -22,7 +24,11 @@ namespace DCTTask.View
             Closing += MainWindow_Closing; // Handle the Closing event
             UpdatePageLabel();
         }
-
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ((Window)sender).Width = Math.Max(e.NewSize.Width, minWidth);
+            ((Window)sender).Height = Math.Max(e.NewSize.Height, minHeight);
+        }
 
         private async void PreviousButton_Click(object sender, RoutedEventArgs e)
         {

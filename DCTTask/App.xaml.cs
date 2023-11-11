@@ -19,8 +19,20 @@ namespace DCTTask
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            // Removing the default resource
+            var dictionariesToKeep = Current.Resources.MergedDictionaries
+    .Where(dictionary => dictionary.Source == null || dictionary.Source == new Uri("View/DarkTheme.xaml", UriKind.Relative))
+    .ToList();
+
+            Current.Resources.MergedDictionaries.Clear();
+
+            foreach (var dictionary in dictionariesToKeep)
+            {
+                Current.Resources.MergedDictionaries.Add(dictionary);
+            }
 
 
+            // Searching cache to find which one should be used
             if (!File.Exists(themeCacheDirectory) || File.ReadAllText(themeCacheDirectory) == "0")
             {
                 Current.Resources.MergedDictionaries.Add(new ResourceDictionary
